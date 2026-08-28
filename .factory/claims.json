@@ -1,0 +1,51 @@
+[
+  {
+    "id": "offline-reload",
+    "claim": "Works offline after your first visit.",
+    "where": "landing facts, README",
+    "test": "npm test -- --grep @claim:offline-reload",
+    "sandbox": "fresh browser context; load /demo once, wait for the service worker, set context offline, reload"
+  },
+  {
+    "id": "demo-isolated",
+    "claim": "Demo — sample data, nothing is saved.",
+    "where": "demo banner, privacy page",
+    "test": "npm test -- --grep @claim:demo-isolated",
+    "sandbox": "seed a private real-workspace marker, use and reset /demo, assert the marker is unread and unchanged"
+  },
+  {
+    "id": "local-only",
+    "claim": "Your last sketch stays in this browser.",
+    "where": "landing facts, privacy page, README",
+    "test": "npm test -- --grep @claim:local-only",
+    "sandbox": "fresh context; save a sketch, inspect localStorage, and assert every request is same-origin"
+  },
+  {
+    "id": "path-max-three",
+    "claim": "Returns up to three repair cards with an example and transfer problem.",
+    "where": "how it works, README",
+    "test": "npm test -- --grep @claim:path-max-three",
+    "sandbox": "demo data; take a three-answer branch and count the resulting cards"
+  },
+  {
+    "id": "print-repair",
+    "claim": "Print repair cards.",
+    "where": "repair result action, README",
+    "test": "npm test -- --grep @claim:print-repair",
+    "sandbox": "demo data; finish a check, invoke print, and assert the print call and rendered card"
+  },
+  {
+    "id": "thirteen-concepts",
+    "claim": "The map contains thirteen concepts from number sense to integrals.",
+    "where": "landing preview, map page, README",
+    "test": "npm test -- --grep @claim:thirteen-concepts",
+    "sandbox": "fresh browser context; open /map and count mapped concepts"
+  },
+  {
+    "id": "free-no-account",
+    "claim": "Free. No account.",
+    "where": "landing facts, terms, README",
+    "test": "npm test -- --grep @claim:free-no-account",
+    "sandbox": "fresh browser context; verify demo entry exists and no identity fields are present"
+  }
+]

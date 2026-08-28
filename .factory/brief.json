@@ -1,0 +1,13 @@
+{
+  "slug": "math-prerequisite-sketch",
+  "title": "Math Missing Step",
+  "summary": "Find the prerequisite behind one blocked math step.",
+  "territory": "utilities",
+  "user": "Adults returning to mathematics for technical study who need to locate the one prerequisite idea blocking a problem without restarting an entire curriculum.",
+  "smallest_useful_product": "Static interactive tool with a curated algebra-to-calculus prerequisite graph, one diagnostic prompt per node, and printable repair path cards.",
+  "success_measure": "At least 70% of pilot users identify a three-node-or-shorter repair path and correctly solve a matched transfer problem within 30 minutes.",
+  "artifact_class": "static-web",
+  "monetization": "free",
+  "constraints": "Have math educators review content; label diagnostics as guidance rather than diagnosis; use openly licensed examples and accessible MathML rendering.",
+  "state": "BUILT"
+}
