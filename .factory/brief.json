@@ -4,10 +4,28 @@
   "summary": "Find the prerequisite behind one blocked math step.",
   "territory": "utilities",
   "user": "Adults returning to mathematics for technical study who need to locate the one prerequisite idea blocking a problem without restarting an entire curriculum.",
+  "evidence": [
+    {
+      "url": "https://hn.algolia.com/api/v1/items/42932869",
+      "date": "2025-02-04",
+      "quote_or_summary": "The asker wants to relearn math and asks which earlier experiences and roadmap decisions mattered; replies span forgotten fundamentals and goal-specific pathways."
+    },
+    {
+      "url": "https://dev.to/rijultp/what-is-slope-a-simple-math-idea-behind-machine-learning-2pl9",
+      "date": "2026-01-01",
+      "quote_or_summary": "A 2026 explainer deliberately pauses an ML sequence to rebuild slope from first principles before advancing."
+    }
+  ],
+  "recurrence": "The 2025 request and a separate 2026 basic-concept detour show a recurring need to repair a narrowly missing foundation rather than consume a full linear course.",
+  "current_workaround": "Search YouTube, jump among Khan Academy playlists, restart a textbook chapter, or ask a chatbot for an explanation with uncertain prerequisites.",
+  "incumbents_and_gap": "Khan Academy, Brilliant, and Math Academy provide broad curricula; they do not offer a transparent, user-authored dependency sketch tied to the exact failed transformation in a problem.",
   "smallest_useful_product": "Static interactive tool with a curated algebra-to-calculus prerequisite graph, one diagnostic prompt per node, and printable repair path cards.",
   "success_measure": "At least 70% of pilot users identify a three-node-or-shorter repair path and correctly solve a matched transfer problem within 30 minutes.",
   "artifact_class": "static-web",
   "monetization": "free",
   "constraints": "Have math educators review content; label diagnostics as guidance rather than diagnosis; use openly licensed examples and accessible MathML rendering.",
+  "est_build_effort": "M",
+  "why_distinct": "It finds and repairs a local conceptual gap instead of competing as a complete adaptive math platform.",
+  "confidence": 4,
   "state": "BUILT"
 }
