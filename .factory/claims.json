@@ -15,7 +15,7 @@
   },
   {
     "id": "local-only",
-    "claim": "Your last sketch stays in this browser.",
+    "claim": "Your last sketch stays in this browser; there are no analytics, ads, or remote data calls.",
     "where": "landing facts, privacy page, README",
     "test": "npm test -- --grep @claim:local-only",
     "sandbox": "fresh context; save a sketch, inspect localStorage, and assert every request is same-origin"
@@ -36,7 +36,7 @@
   },
   {
     "id": "thirteen-concepts",
-    "claim": "The map contains thirteen concepts from number sense to integrals.",
+    "claim": "The map contains thirteen concepts from number sense to integrals and shows direct prerequisites.",
     "where": "landing preview, map page, README",
     "test": "npm test -- --grep @claim:thirteen-concepts",
     "sandbox": "fresh browser context; open /map and count mapped concepts"
@@ -47,5 +47,12 @@
     "where": "landing facts, terms, README",
     "test": "npm test -- --grep @claim:free-no-account",
     "sandbox": "fresh browser context; verify demo entry exists and no identity fields are present"
+  },
+  {
+    "id": "open-content",
+    "claim": "The examples and generated art ship under the MIT License.",
+    "where": "map page, README, design provenance",
+    "test": "npm test -- --grep @claim:open-content",
+    "sandbox": "fresh checkout; inspect the license, source data, generated-art prompt sidecar, and design provenance"
   }
 ]

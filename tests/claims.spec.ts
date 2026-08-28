@@ -64,6 +64,7 @@ test('@claim:print-repair prints the repair cards', async ({ page }) => {
 test('@claim:thirteen-concepts contains thirteen mapped concepts', async ({ page }) => {
   await page.goto('/map');
   await expect(page.locator('.full-map li')).toHaveCount(13);
+  await expect(page.locator('.full-map li p')).toHaveCount(13);
 });
 
 test('@claim:free-no-account starts without payment or an account', async ({ page }) => {

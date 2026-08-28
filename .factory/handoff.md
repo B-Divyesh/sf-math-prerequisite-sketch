@@ -25,7 +25,7 @@ Deploy `dist/`. Its root contains `index.html`. The exact build command is `npm 
 ## Verification
 
 - `npm test`: 30 passed across desktop Chromium and a 390 × 844 Chromium viewport.
-- Claim tests: all seven entries in `.factory/claims.json` passed, including offline reload, demo isolation, local storage, three-node maximum, and print.
+- Claim tests: all eight entries in `.factory/claims.json` passed, including offline reload, demo isolation, local storage, three-node maximum, print, and content licensing.
 - Axe integration: no serious or critical violations on `/`, `/demo`, `/map`, `/privacy`, `/terms`, or `/404`.
 - `/opt/fleet/lib/verify-url.sh`: 200 response, one h1, English language, main landmark, complete image alt text, zero console errors. Measured load: 542 ms on the local production preview.
 - Lighthouse 12.3.0 mobile: Performance 100, Accessibility 100, Best Practices 100, SEO 100. LCP 1.5 s, CLS 0, total blocking time 0 ms, speed index 0.9 s.
