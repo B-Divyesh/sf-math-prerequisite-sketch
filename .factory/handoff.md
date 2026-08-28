@@ -48,3 +48,5 @@ The brief requires a credentialed math-educator review. There is no real credent
 ## Deploy
 
 The product remains a Vite + TypeScript static site, built to `dist/` for Azure Static Web Apps. Pushing this repair commit to `main` is the configured static deployment trigger.
+
+Commit `337e00d` was pushed to `origin/main`. At the final live check on 28 August 2026, the hostname still referenced the earlier `index-PHfBTO6X.js` / `index-DpHrJX83.css` bundle rather than this build's `index-DPNpdPHt.js` / `index-DOQgff8m.css`; rollout is pending the external static deployment trigger. No infrastructure settings were changed.
