@@ -40,7 +40,7 @@ test('keyboard path reaches and completes the sample check', async ({ page }) =>
   await expect(page.getByText('Skip to main content')).toBeFocused();
   await page.getByRole('button', { name: /^A/ }).focus();
   await page.keyboard.press('Enter');
-  await expect(page.getByRole('heading', { name: 'Repair this path, then retry' })).toBeVisible();
+  await expect(page.getByRole('heading', { name: 'No prerequisite gap found' })).toBeVisible();
 });
 
 test('service worker update replaces the previous app-shell cache', async ({ page, context }) => {

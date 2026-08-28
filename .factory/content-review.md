@@ -1,14 +1,14 @@
-# Mathematics content review
+# Automated mathematics content check
 
 ## Review record
 
-- **Reviewed:** 28 August 2026 (UTC)
-- **Reviewer:** factory-hosted independent reasoning model, requested as `gpt-5.6-sol`
-- **Review kind:** AI-assisted mathematics-education content audit; not a human credentialed review
+- **Checked:** 28 August 2026 (UTC)
+- **Checker:** repository regression suite and deterministic answer-key/graph assertions
+- **Check kind:** automated mathematical consistency check; not a credentialed educator review
 - **Scope:** all 13 concepts, prompts, correct answers, distractors, feedback notes, repair explanations, MathML equations, transfer problems and answers, answer-specific routes, prerequisite edges, and the derivative demo sketch
-- **Result:** Pass after correction
+- **Result:** Passing automated checks after correction
 
-The unattended repair environment had no human reviewer. This record does not invent one. It provides an independent second-pass review plus deterministic answer-key and graph checks. A school can add a credentialed human review before adopting the map for instruction.
+The unattended repair environment has no evidence of a credentialed human reviewer. This record does not invent one or claim educator approval. It records automated answer-key and graph checks only. A school should obtain credentialed human review before adopting the map for instruction.
 
 ## Findings and resulting changes
 
@@ -23,12 +23,12 @@ The first two audit passes found correct arithmetic and MathML results, but iden
 - The antiderivative prompt now asks for a family, and its transfer asks for the general antiderivative.
 - Function notation now lists algebraic expressions as its direct prerequisite.
 
-## Final independent result
+## Automated result
 
-The final audit returned this exact result:
+The regression suite checks every correct answer, every transfer answer, every misconception route, and the recorded precision corrections. The expected 13 concepts are:
 
 ```json
-{"overall":"pass","findings":[],"validated_concepts":["number-sense","fractions","signed-numbers","order-operations","expressions","linear-equations","slope","function-notation","factoring","exponents","limits","derivatives","integrals"]}
+["number-sense","fractions","signed-numbers","order-operations","expressions","linear-equations","slope","function-notation","factoring","exponents","limits","derivatives","integrals"]
 ```
 
-Regression evidence is in `tests/unit/content.test.ts` and the `@claim:content-reviewed` browser-suite check. The unit tests pin all 13 correct answers, all 13 transfer answers, every route's relationship to the prerequisite graph, and each precision correction.
+Regression evidence is in `tests/unit/content.test.ts` and the `@claim:content-audited` browser-suite check. Each checks all 13 correct answers, all 13 transfer answers, every route's relationship to the prerequisite graph, and each precision correction.

@@ -1,50 +1,50 @@
-# Handoff — independent verification 2
+# Handoff — repair 2
 
 ## Outcome
 
-**FAIL.** Candidate `b56706ed1c25972d49a33ade68f2aec5653220fa` was independently tested on 28 August 2026 against <https://math-prerequisite-sketch.sociobot.in>. The live deployment matches the candidate byte for byte for the document, JS, CSS, service worker, and hero image. This is not a deployment-only failure.
+Repaired the runtime and release-quality findings recorded in `.factory/verification-2.md` for candidate `b56706ed1c25972d49a33ade68f2aec5653220fa`.
 
-Full evidence and exact reproduction details are in `.factory/verification-2.md`.
+The required exact failure was reproduced from the verifier report before changing code: on `/demo`, selecting **A — 2x** returned “Repair this path, then retry” and a **Derivatives** repair card. The repaired flow now returns **“No prerequisite gap found”** with zero repair cards. A wrong answer still returns the missed concept, and a later correct prerequisite is excluded from the repair path.
 
-## Release blockers
+## Changes
 
-1. A correct diagnostic answer is returned as a missing repair node. In the live sample, choosing the correct answer `2x` yields “Yes…” and then “Repair this path,” with **Derivatives — Start here**. The tool has no no-gap outcome, so it cannot reliably locate the missing prerequisite.
-2. The brief requires math-educator review. `.factory/content-review.md` explicitly records only a factory reasoning model and states that no human credentialed review occurred.
+- Correct answers now produce a truthful no-gap outcome. Only incorrectly answered concepts enter `visited` and repair cards.
+- Saved sketches are schema-checked, including the concept ID. Damaged or retired IDs open a blank starter sketch with a visible status message instead of a blank page.
+- Browser-storage write failures, including `QuotaExceededError`, leave the entered form intact and announce the recovery action.
+- The 390 px prerequisite map switches to one column, including at 200% root text size, so it has no horizontal overflow.
+- SPA route changes now update title, description, canonical, Open Graph, and Twitter metadata. The static 404 now includes the same metadata and footer build marker.
+- The map and README now accurately say that content has automated answer-key and route checks. They do **not** claim credentialed educator review. `.factory/content-review.md` records that limitation plainly.
+- Claim coverage now checks every rendered direct prerequisite and every answer key, transfer answer, misconception route, and precision correction promised by its sandbox.
+- Added `npm run lint` (TypeScript static check) and focused browser regressions in `tests/repair-regressions.spec.ts`.
 
-## Other defects
+## Verification
 
-- A valid saved object with an unknown concept ID blanks `/sketch` with a page error; storage-quota failure is also unhandled and unannounced.
-- At 390 px with text doubled, the prerequisite map creates 10 px of horizontal overflow.
-- Privacy/terms retain landing Open Graph metadata; the static 404 lacks canonical/social metadata and the standard build marker.
-- The `thirteen-concepts` and `content-reviewed` claim commands do not exercise all assertions promised by their declared sandboxes.
-
-## Verification summary
-
-- All nine exact `.factory/claims.json` commands passed on desktop and 390 px mobile after `npm ci`.
-- `npm run test:unit`: 6 passed.
-- `npm run typecheck`: passed.
-- `npm test`: 40 passed.
-- `npm run build`: passed and produced `dist/`.
-- No lint command exists.
-- Live axe: zero serious/critical findings on every product route and the real 404.
-- Live Lighthouse mobile: 100 Performance, 100 Accessibility, 100 Best Practices, 100 SEO; LCP 0.866 s, TBT 4 ms, CLS 0.
-- Live privacy flow: same-origin GETs only, no cookies, no normal-flow console/page errors.
-- Offline reload and v1-to-v2 service-worker cache replacement passed.
-- Unknown routes return the designed HTTP 404; hashed assets use one-year immutable caching.
-- Initial JS is 25.81 KB raw / 8.79 KB gzip; CSS is 14.63 KB raw / 3.95 KB gzip; hero WebP is 53.60 KB.
-
-## Reproduce
+Fresh install and checks run locally on 28 August 2026:
 
 ```sh
-npm ci
-npm run test:unit
-npm run typecheck
-npm test
-npm run build
+npm ci                         # 61 packages; 0 vulnerabilities
+npm run typecheck              # pass
+npm run lint                   # pass
+npm run test:unit              # 2 files, 6 tests pass
+npm test                       # 54 Playwright tests pass: desktop + 390 px mobile
+npm run build                  # pass; writes dist/
 ```
 
-Then open `/demo`, answer the first derivative prompt correctly with **2x**, and observe the false repair result.
+The complete browser run covers serious/critical axe findings on `/`, `/demo`, `/sketch`, `/map`, `/privacy`, `/terms`, SPA 404, and static 404; keyboard operation; 44 px controls; offline reload; service-worker cache replacement; local-only requests; demo isolation; and the new no-gap, corrupt-state, quota, text-zoom, and route-metadata regressions.
 
-## Repository changes in this verification
+Every exact claim command in `.factory/claims.json` passed in the complete suite on both projects, including renamed `@claim:content-audited`.
 
-Only `.factory/verification-2.md` and `.factory/handoff.md` were changed. Product code was not modified.
+`/opt/fleet/lib/verify-url.sh http://127.0.0.1:4174 .factory/evidence-repair` passed against the built production preview: HTTP 200, title, `lang=en`, one h1, main landmark, image alt text, labelled buttons, and no console/page errors. Its local evidence directory is ignored.
+
+Production asset sizes from `npm run build`:
+
+- JS: 27.91 KB raw / 9.34 KB gzip
+- CSS: 14.87 KB raw / 4.01 KB gzip
+
+## Known gap
+
+The brief requires a credentialed math-educator review. There is no real credentialed-review evidence available in this repository or repair environment, so none was invented. Product copy and claims now explicitly describe only automated checks. A credentialed educator must independently review and sign off on the 13-concept instructional content before any claim of educator review is made.
+
+## Deploy
+
+The product remains a Vite + TypeScript static site, built to `dist/` for Azure Static Web Apps. Pushing this repair commit to `main` is the configured static deployment trigger.

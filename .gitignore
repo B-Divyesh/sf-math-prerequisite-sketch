@@ -3,6 +3,7 @@ dist/
 test-results/
 test-report/
 artifacts-*.png
+.factory/evidence-repair/
 graphify-out/
 .DS_Store
 .env

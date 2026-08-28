@@ -26,13 +26,13 @@ npm run typecheck
 npm run build
 ```
 
-`npm run test:unit` checks the reviewed answer key, misconception routes, service-worker update policy, cache policy, and real-404 configuration. `npm test` builds and serves the production app, then runs Chromium checks on desktop and a 390 px mobile viewport. Browser tests cover every claim in `.factory/claims.json`, keyboard use, 44 px touch targets, and serious or critical axe findings.
+`npm run test:unit` checks the answer key, misconception routes, service-worker update policy, cache policy, and real-404 configuration. `npm test` builds and serves the production app, then runs Chromium checks on desktop and a 390 px mobile viewport. Browser tests cover every claim in `.factory/claims.json`, keyboard use, 44 px touch targets, and serious or critical axe findings.
 
 `npm run build` writes the static deploy to `dist/`, with `dist/index.html` at its root. Deploy that folder to Azure Static Web Apps. The included `staticwebapp.config.json` supplies fallback routing, security headers, and the 404 response.
 
 ## Content and privacy
 
-The explanations and examples are original and MIT licensed. An independent mathematics-education audit corrected the content and passed all 13 concepts. It was model-assisted, not a credentialed human review. Diagnostics remain study guidance, not a learning diagnosis. See [.factory/content-review.md](.factory/content-review.md).
+The explanations and examples are original and MIT licensed. Automated answer-key and prerequisite-route checks cover all 13 concepts. This is not a credentialed educator review. Diagnostics remain study guidance, not a learning diagnosis. See [.factory/content-review.md](.factory/content-review.md).
 
 See [the privacy page](https://math-prerequisite-sketch.sociobot.in/privacy), [the terms](https://math-prerequisite-sketch.sociobot.in/terms), and [.factory/demo.md](.factory/demo.md).
 

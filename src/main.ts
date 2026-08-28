@@ -22,6 +22,16 @@ const titles: Record<string, string> = {
   '/404': 'Page not found — Math Missing Step'
 };
 
+const descriptions: Record<string, string> = {
+  '/': 'Trace one blocked math step through a clear algebra-to-calculus prerequisite map and print a short repair path.',
+  '/sketch': 'Describe the math step where your work stopped and check one prerequisite at a time.',
+  '/demo': 'Try a sample derivative problem and trace one prerequisite without saving anything.',
+  '/map': 'Inspect thirteen algebra-to-calculus concepts and their direct prerequisites.',
+  '/privacy': 'Read how Math Missing Step keeps a real sketch in this browser and sends no problem data away.',
+  '/terms': 'Read the terms for the free Math Missing Step study-guidance tool.',
+  '/404': 'This path has no node in the Math Missing Step map.'
+};
+
 function routePath() {
   const path = window.location.pathname.replace(/\/$/, '') || '/';
   return titles[path] ? path : '/404';
@@ -122,7 +132,8 @@ function sketchPage() {
     <button class="button primary" type="submit">Check this prerequisite</button>
   </form>`;
   const activity = run.result ? resultPanel(run.result) : diagnosticPanel(conceptById.get(run.current)!);
-  return `<section class="workspace wrap"><div class="workspace-head"><p class="eyebrow">TRACE CONSOLE / ${demo ? 'SAMPLE' : 'LOCAL'}</p><h1 tabindex="-1">Trace the step that stopped your work</h1><p>Answer the prompt yourself. A wrong answer chooses the next branch to inspect.</p></div><div class="workspace-grid"><aside><h2>Your stuck step</h2>${form}</aside><section class="diagnostic" aria-labelledby="diagnostic-title">${activity}</section></div><section class="map-panel" aria-labelledby="map-panel-title"><h2 id="map-panel-title">Your visible prerequisite map</h2>${miniMap(run.visited.concat(run.current))}</section><p class="guidance">This check offers study guidance. It is not a learning diagnosis.</p></section>`;
+  const storageNotice = !demo && savedNotice ? `<p class="form-error storage-notice" role="status">${escapeHtml(savedNotice)}</p>` : '';
+  return `<section class="workspace wrap"><div class="workspace-head"><p class="eyebrow">TRACE CONSOLE / ${demo ? 'SAMPLE' : 'LOCAL'}</p><h1 tabindex="-1">Trace the step that stopped your work</h1><p>Answer the prompt yourself. A wrong answer chooses the next branch to inspect.</p></div>${storageNotice}<div class="workspace-grid"><aside><h2>Your stuck step</h2>${form}</aside><section class="diagnostic" aria-labelledby="diagnostic-title">${activity}</section></div><section class="map-panel" aria-labelledby="map-panel-title"><h2 id="map-panel-title">Your visible prerequisite map</h2>${miniMap(run.visited.concat(run.current))}</section><p class="guidance">This check offers study guidance. It is not a learning diagnosis.</p></section>`;
 }
 
 function diagnosticPanel(concept: Concept) {
@@ -130,6 +141,9 @@ function diagnosticPanel(concept: Concept) {
 }
 
 function resultPanel(ids: string[]) {
+  if (ids.length === 0) {
+    return `<div class="result-head success-result"><p class="eyebrow">CHECK COMPLETE / NO GAP FOUND</p><h2 id="diagnostic-title" tabindex="-1">No prerequisite gap found</h2><p>${escapeHtml(run?.message || 'That answer shows this prerequisite is ready. Try the stopped step again or check another idea.')}</p><div class="result-actions"><button class="button primary" type="button" data-action="restart">Run another check</button></div></div>`;
+  }
   const cards = ids.map((id, index) => {
     const c = conceptById.get(id)!;
     const state = index === 0 ? 'Start here' : index === ids.length - 1 ? 'Return here' : 'Then repair';
@@ -140,7 +154,7 @@ function resultPanel(ids: string[]) {
 
 function mapPage() {
   const bands = ['Foundations', 'Algebra', 'Functions', 'Calculus'] as const;
-  return `<section class="content-page wrap"><p class="eyebrow">CURATED MAP / V1</p><h1 tabindex="-1">Inspect every prerequisite connection</h1><p class="lede">Thirteen concepts connect number sense to introductory integrals. Select a concept to read its direct prerequisites.</p><div class="full-map">${bands.map((band) => `<section><h2>${band}</h2><ul>${concepts.filter((c) => c.band === band).map((c) => `<li id="${c.id}"><h3>${c.label}</h3><p>${c.prerequisiteIds.length ? `Needs: ${c.prerequisiteIds.map((id) => conceptById.get(id)!.label).join(', ')}.` : 'Starting concept.'}</p><a href="/sketch?goal=${c.id}" data-concept-link="${c.id}">Check this concept</a></li>`).join('')}</ul></section>`).join('')}</div><aside class="review-note"><strong>Content note</strong><p>Examples and branches passed an independent mathematical audit and exact-answer checks. Use them as study guidance, not a diagnosis.</p></aside></section>`;
+  return `<section class="content-page wrap"><p class="eyebrow">CURATED MAP / V1</p><h1 tabindex="-1">Inspect every prerequisite connection</h1><p class="lede">Thirteen concepts connect number sense to introductory integrals. Select a concept to read its direct prerequisites.</p><div class="full-map">${bands.map((band) => `<section><h2>${band}</h2><ul>${concepts.filter((c) => c.band === band).map((c) => `<li id="${c.id}"><h3>${c.label}</h3><p>${c.prerequisiteIds.length ? `Needs: ${c.prerequisiteIds.map((id) => conceptById.get(id)!.label).join(', ')}.` : 'Starting concept.'}</p><a href="/sketch?goal=${c.id}" data-concept-link="${c.id}">Check this concept</a></li>`).join('')}</ul></section>`).join('')}</div><aside class="review-note"><strong>Content note</strong><p>Automated mathematical consistency checks cover each answer key and branch. Use this as study guidance, not a diagnosis.</p></aside></section>`;
 }
 
 function privacyPage() {
@@ -155,16 +169,36 @@ function notFoundPage() {
   return `<section class="not-found wrap"><div class="lost-node" aria-hidden="true">?</div><p class="eyebrow">SIGNAL LOST / 404</p><h1 tabindex="-1">This path has no math node</h1><p>The address does not match a page in this map.</p><a class="button primary" href="/" data-link>Return to the map</a></section>`;
 }
 
+let savedNotice = '';
+
 function loadSketch(): Sketch {
   const fallback = { problem: '', stopped: '', goal: 'linear-equations' };
-  try { return { ...fallback, ...JSON.parse(localStorage.getItem(REAL_KEY) || '{}') }; } catch { return fallback; }
+  savedNotice = '';
+  try {
+    const raw = localStorage.getItem(REAL_KEY);
+    if (!raw) return fallback;
+    const parsed: unknown = JSON.parse(raw);
+    if (!isSketch(parsed)) {
+      savedNotice = 'A saved sketch could not be used, so a blank starter sketch is ready.';
+      return fallback;
+    }
+    return parsed;
+  } catch {
+    savedNotice = 'A saved sketch could not be read, so a blank starter sketch is ready.';
+    return fallback;
+  }
+}
+
+function isSketch(value: unknown): value is Sketch {
+  if (!value || typeof value !== 'object') return false;
+  const sketch = value as Record<string, unknown>;
+  return typeof sketch.problem === 'string' && typeof sketch.stopped === 'string' && typeof sketch.goal === 'string' && conceptById.has(sketch.goal);
 }
 
 function handleAnswer(index: number) {
   if (!run) return;
   const concept = conceptById.get(run.current)!;
   const answer = concept.answers[index];
-  run.visited.push(concept.id);
   run.message = answer.note;
   if (answer.correct) {
     run.result = run.visited.slice(-3).reverse();
@@ -172,6 +206,7 @@ function handleAnswer(index: number) {
     requestAnimationFrame(() => document.querySelector<HTMLElement>('#diagnostic-title')?.focus());
     return;
   }
+  run.visited.push(concept.id);
   if (run.visited.length >= 3 || !answer.next || run.visited.includes(answer.next)) {
     run.result = run.visited.slice(-3).reverse();
     run.message = 'This branch needs a wider review. Start with the earliest card shown here.';
@@ -198,7 +233,16 @@ function bindEvents() {
       document.querySelector<HTMLElement>(!sketch.problem ? '#problem' : '#stopped')?.focus();
       return;
     }
-    if (!demo) localStorage.setItem(REAL_KEY, JSON.stringify(sketch));
+    if (!demo) {
+      try {
+        localStorage.setItem(REAL_KEY, JSON.stringify(sketch));
+      } catch {
+        const error = document.querySelector<HTMLElement>('#form-error')!;
+        error.textContent = 'Your sketch could not be saved in this browser. Copy it, free browser storage, then try again.';
+        error.focus();
+        return;
+      }
+    }
     run = { sketch, current: sketch.goal, visited: [], message: 'Sketch ready. Start with this prompt.' };
     render(false);
   });
@@ -221,7 +265,14 @@ function render(focusHeading = false) {
     run = { sketch, current: requestedGoal, visited: [] };
   }
   document.title = titles[path];
-  document.querySelector<HTMLLinkElement>('link[rel="canonical"]')!.href = `https://math-prerequisite-sketch.sociobot.in${path === '/' ? '/' : path}`;
+  const url = `https://math-prerequisite-sketch.sociobot.in${path === '/' ? '/' : path}`;
+  document.querySelector<HTMLLinkElement>('link[rel="canonical"]')!.href = url;
+  document.querySelector<HTMLMetaElement>('meta[name="description"]')!.content = descriptions[path];
+  document.querySelector<HTMLMetaElement>('meta[property="og:title"]')!.content = titles[path];
+  document.querySelector<HTMLMetaElement>('meta[property="og:description"]')!.content = descriptions[path];
+  document.querySelector<HTMLMetaElement>('meta[property="og:url"]')!.content = url;
+  document.querySelector<HTMLMetaElement>('meta[name="twitter:title"]')!.content = titles[path];
+  document.querySelector<HTMLMetaElement>('meta[name="twitter:description"]')!.content = descriptions[path];
   const pages: Record<string, () => string> = { '/': landing, '/sketch': sketchPage, '/demo': sketchPage, '/map': mapPage, '/privacy': privacyPage, '/terms': termsPage, '/404': notFoundPage };
   app.innerHTML = shell(pages[path](), path);
   bindEvents();

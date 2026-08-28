@@ -69,4 +69,4 @@ Print removes navigation and dark chrome. Repair cards become black-on-white, on
 
 ## Content review
 
-The dated independent mathematics-education audit, its scope, corrections, final result, and reviewer limitations are recorded in `.factory/content-review.md`. The review changed instructional content only; it did not change this visual thesis.
+The dated automated mathematics content check, its scope, corrections, result, and limitation (not a credentialed educator review) are recorded in `.factory/content-review.md`. The check changed instructional content only; it did not change this visual thesis.

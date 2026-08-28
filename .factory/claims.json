@@ -56,10 +56,10 @@
     "sandbox": "fresh checkout; inspect the license, source data, generated-art prompt sidecar, and design provenance"
   },
   {
-    "id": "content-reviewed",
-    "claim": "Examples and branches passed an independent mathematical audit and exact-answer checks.",
+    "id": "content-audited",
+    "claim": "Examples and branches receive automated mathematical consistency checks.",
     "where": "map page, README",
-    "test": "npm test -- --grep @claim:content-reviewed",
+    "test": "npm test -- --grep @claim:content-audited",
     "sandbox": "fresh checkout; inspect the dated review record, final pass result, all 13 answer keys, and the corrected routing and precision rules"
   }
 ]

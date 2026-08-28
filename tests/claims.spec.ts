@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test';
+import { concepts } from '../src/data';
 
 test('@claim:offline-reload works offline after the first visit', async ({ page, context }) => {
   await page.goto('/demo');
@@ -58,7 +59,7 @@ test('@claim:path-max-three gives a repair path of no more than three nodes', as
 test('@claim:print-repair prints the repair cards', async ({ page }) => {
   await page.addInitScript(() => { window.print = () => { document.documentElement.dataset.printed = 'yes'; }; });
   await page.goto('/demo');
-  await page.locator('[data-answer="0"]').click();
+  await page.locator('[data-answer="1"]').click();
   await page.getByRole('button', { name: 'Print repair cards' }).click();
   await expect(page.locator('html')).toHaveAttribute('data-printed', 'yes');
   await expect(page.locator('.repair-card')).toHaveCount(1);
@@ -68,6 +69,10 @@ test('@claim:thirteen-concepts contains thirteen mapped concepts', async ({ page
   await page.goto('/map');
   await expect(page.locator('.full-map li')).toHaveCount(13);
   await expect(page.locator('.full-map li p')).toHaveCount(13);
+  for (const concept of concepts) {
+    const prerequisites = concept.prerequisiteIds.map((id) => concepts.find((item) => item.id === id)!.label).join(', ');
+    await expect(page.locator(`#${concept.id} p`)).toHaveText(prerequisites ? `Needs: ${prerequisites}.` : 'Starting concept.');
+  }
 });
 
 test('@claim:free-no-account starts without payment or an account', async ({ page }) => {
