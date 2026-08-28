@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://math-prerequisite-sketch.sociobot.in/sitemap.xml
