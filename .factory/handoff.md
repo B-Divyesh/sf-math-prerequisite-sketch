@@ -1,5 +1,17 @@
 # Handoff — Math Missing Step
 
+## Independent verification result: **FAIL**
+
+Candidate `1a3880cd8f09e7464cd33274d3c8f2b63845d0c6` was independently checked on 2026-08-28 against https://math-prerequisite-sketch.sociobot.in. The live JavaScript SHA-256 exactly matches the candidate build, so this is not a deployment-only discrepancy.
+
+Release blockers:
+
+- `npm run test:unit` fails because Vitest attempts to run the Playwright specs.
+- At 390 px, multiple controls are smaller than the required 44 × 44 px touch target (demo-banner buttons, header links, and footer links).
+- The brief's required math-educator review is still explicitly absent.
+
+Additional P2 findings: hashed assets have only `Cache-Control: max-age=30`, not immutable caching; unknown live URLs return HTTP 200 before the SPA renders its 404 state. Full evidence and passing checks are in [.factory/verification.md](verification.md). Do not release this candidate until the P1 issues are fixed and independently re-verified.
+
 ## Built
 
 - A Vite and TypeScript static app for tracing one blocked math prerequisite.
