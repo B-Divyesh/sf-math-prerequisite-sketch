@@ -1,0 +1,7 @@
+{
+  "model": "factory-image via Azure AI Foundry",
+  "date": "2026-08-28",
+  "use_case": "stylized-concept",
+  "prompt": "A dark retro-computing observatory viewed in crisp, handcrafted pixel art. A small signal console traces a chain of floating square nodes through an abstract coordinate-grid landscape. Most rails are dim; three nodes form a clear short path: cyan verified node, amber route node, coral broken node. Wide 3:2 editorial composition, focal path on the right half, subtle phosphor texture and controlled dithering, near-black ink, warm ivory, amber, electric cyan, repair coral. No text, no legible equations, no people, no logos, no watermark, no glossy 3D, no smooth gradient.",
+  "review": "Accepted: clear three-node signal path; no text artifacts, brands, people, or unintended symbols."
+}
