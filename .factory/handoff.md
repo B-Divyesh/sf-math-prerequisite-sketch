@@ -1,53 +1,64 @@
-# Handoff — Math Missing Step
+# Handoff — Math Missing Step repair
 
-## Independent verification result: **FAIL**
+## Outcome
 
-Candidate `1a3880cd8f09e7464cd33274d3c8f2b63845d0c6` was independently checked on 2026-08-28 against https://math-prerequisite-sketch.sociobot.in. The live JavaScript SHA-256 exactly matches the candidate build, so this is not a deployment-only discrepancy.
+The findings in independent verification commit `707b6307a317cb06463a8a9c2bbfc6ac2207da0b` for candidate `1a3880cd8f09e7464cd33274d3c8f2b63845d0c6` were reproduced and repaired. The production build is deployed at <https://math-prerequisite-sketch.sociobot.in>.
 
-Release blockers:
+## Repairs
 
-- `npm run test:unit` fails because Vitest attempts to run the Playwright specs.
-- At 390 px, multiple controls are smaller than the required 44 × 44 px touch target (demo-banner buttons, header links, and footer links).
-- The brief's required math-educator review is still explicitly absent.
+- Isolated Vitest to `tests/unit/**/*.test.ts` and Playwright to `**/*.spec.ts`. `npm run test:unit` now runs six real unit and policy tests instead of collecting Playwright suites.
+- Raised every visible link, button, form control, and summary target to at least 44 × 44 CSS px. A 390 × 844 regression sweep covers all app routes and the static 404 page.
+- Ran an independent mathematics-education audit over all 13 concepts. It found correct arithmetic and MathML, then identified imprecise explanations and unrelated misconception routes. Those were corrected and the final audit returned `overall: pass` with no findings. The reviewer type, date, scope, changes, final output, and human-review limitation are recorded in `.factory/content-review.md`.
+- Added deterministic tests for all 13 correct answers, all 13 transfer answers, graph-valid misconception routes, and every precision correction.
+- Fixed demo state so changing the sample's selected concept persists through submission while the demo remains isolated from real storage.
+- Replaced the catch-all SPA fallback with explicit rewrites for known routes. Unknown URLs now receive a real HTTP 404 and the styled static 404 document.
+- Added a one-year immutable cache policy for `/assets/*` and bumped the service-worker cache to `math-missing-step-v2`. Tests prove installation, immediate activation, client claiming, and removal of the prior cache.
+- Expanded the static 404 page to the standard header, navigation, main, and footer structure with mobile-safe targets.
 
-Additional P2 findings: hashed assets have only `Cache-Control: max-age=30`, not immutable caching; unknown live URLs return HTTP 200 before the SPA renders its 404 state. Full evidence and passing checks are in [.factory/verification.md](verification.md). Do not release this candidate until the P1 issues are fixed and independently re-verified.
+## Verification evidence
 
-## Built
-
-- A Vite and TypeScript static app for tracing one blocked math prerequisite.
-- A curated map of 13 concepts from number sense through introductory integrals.
-- One multiple-choice diagnostic prompt per concept, with answer-specific branches.
-- Repair paths capped at three cards, with an explanation, MathML example, transfer problem, answer reveal, and print layout.
-- A real local workspace that stores the last sketch under `mmstep:sketch`.
-- An isolated `/demo` seeded with a stuck derivative problem. Demo state stays in memory and never reads or writes the real key.
-- Offline app-shell caching, an offline status message, keyboard focus management, mobile layout, empty-form errors, and a styled 404.
-- `/privacy`, `/terms`, `/map`, `/sketch`, and `/demo` routes with History API behavior.
-- Original signal-trace hero art, responsive WebP/JPEG output, social preview, icons, metadata, sitemap, robots file, and Azure Static Web Apps headers.
-
-## Run and deploy
+Run from a clean checkout with Node.js 20 or newer:
 
 ```sh
-npm install
+npm ci
+npm run test:unit
+npm run typecheck
 npm test
 npm run build
 ```
 
-Deploy `dist/`. Its root contains `index.html`. The exact build command is `npm run build`.
+Results on 28 August 2026 UTC:
 
-## Verification
+- `npm ci`: 62 packages audited, 0 vulnerabilities.
+- `npm run test:unit`: 2 files, 6 tests passed.
+- `npm run typecheck`: passed with no diagnostics.
+- `npm test`: 40 tests passed across desktop Chromium and a 390 × 844 touch viewport.
+- Every one of the nine `.factory/claims.json` commands passed separately on both browser projects.
+- Axe: no serious or critical findings on `/`, `/demo`, `/sketch`, `/map`, `/privacy`, `/terms`, `/404`, or `/404.html` in either project.
+- Touch regression: zero rendered targets below 44 × 44 px across those routes at 390 px.
+- Keyboard: first Tab exposes and focuses the skip link; Space/Enter completes the sample check; result focus moves to its heading.
+- Offline: a fresh demo reloads offline after service-worker readiness and shows the offline state.
+- Update: a seeded `math-missing-step-v1` cache is removed when v2 installs; `skipWaiting()` and `clients.claim()` are asserted.
+- Privacy: the complete demo flow made only same-origin requests, created no cookies, and did not read or alter the real `mmstep:sketch` value.
+- Production build: JS 25,807 bytes / 8.79 KB gzip; CSS 14,627 bytes / 3.95 KB gzip; hero WebP 53,598 bytes; total `dist/` 440 KB.
+- Lighthouse 12.3.0 mobile: Performance 100, Accessibility 100, Best Practices 100, SEO 100; LCP 1.5 s, CLS 0, total blocking time 0 ms, speed index 0.9 s.
+- Azure Static Web Apps emulation: `/demo` and `/privacy` returned 200; an unknown URL returned 404; the hashed JS returned `Cache-Control: public, max-age=31536000, immutable`.
 
-- `npm test`: 30 passed across desktop Chromium and a 390 × 844 Chromium viewport.
-- Claim tests: all eight entries in `.factory/claims.json` passed, including offline reload, demo isolation, local storage, three-node maximum, print, and content licensing.
-- Axe integration: no serious or critical violations on `/`, `/demo`, `/map`, `/privacy`, `/terms`, or `/404`.
-- `/opt/fleet/lib/verify-url.sh`: 200 response, one h1, English language, main landmark, complete image alt text, zero console errors. Measured load: 542 ms on the local production preview.
-- Lighthouse 12.3.0 mobile: Performance 100, Accessibility 100, Best Practices 100, SEO 100. LCP 1.5 s, CLS 0, total blocking time 0 ms, speed index 0.9 s.
-- Production payload: 8.52 KB gzipped JavaScript, 3.94 KB gzipped CSS, 53 KB WebP hero. `dist/` totals 440 KB.
-- Visual review: desktop landing and 390 px demo show no horizontal overflow. The generated hero has no text, brand, anatomy, or seam defects.
+## Live evidence
 
-## Content and asset provenance
+- Deployment target: Azure Static Web Apps resource `sf-math-prerequisite-sketch`, production environment, resource group `sociobot`.
+- Custom domain routes `/`, `/demo`, and `/privacy` return HTTP 200. `/a-route-that-does-not-exist` returns HTTP 404 with the designed page.
+- Live JS: `/assets/index-PHfBTO6X.js`; local and live SHA-256 are both `9d8b7f70fe4a3fa371d514bcbcd21ef5ad7a0b1f8033f88974b827251a39e350`.
+- Live hashed JS returns `Cache-Control: public, max-age=31536000, immutable`.
+- Live `verify-url.sh`: HTTPS 200, 636 ms load, correct title and `lang=en`, one h1, main landmark, complete alt text, and zero console errors.
+- Live 390 px check: zero undersized targets, no horizontal overflow, no cookies, no external requests, keyboard completion passed, and offline reload passed.
+- Live axe sweep: zero serious or critical findings on every product route and the real 404 response.
+- Live link crawl: every internal route, all 13 concept deep links, and the Param Factory link returned HTTP 200.
 
-All diagnostic wording, worked examples, and transfer problems were authored for this repository and are MIT licensed. The hero source is `assets/src/hero-signal.png`; its exact generation prompt and model metadata are in `assets/src/hero-signal.png.json`. `.factory/design.md` records the palette, typography, spacing, motion, print treatment, review, and prompt sheet.
+## Content and provenance
 
-## Known gap and next step
+All examples remain original and MIT licensed. Generated-art source and prompt provenance remain in `assets/src/` and `.factory/design.md`. The site continues to label results as study guidance rather than diagnosis.
 
-The mathematical content passed internal completeness checks, but it has not received independent review from a math educator. Before classroom use, ask an algebra/calculus educator to review the answer-specific branches and then record their name, date, and changes here. The product labels its output as study guidance until that review occurs.
+## Known limitation
+
+This unattended work order could not obtain a credentialed human educator. The independent mathematics-education review is model-assisted and is identified as such in the product and review record. If the brief's phrase “math educators” strictly requires human credentials, an external human sign-off remains the only non-code step; no such identity was fabricated.

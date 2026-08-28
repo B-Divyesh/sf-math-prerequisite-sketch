@@ -66,3 +66,7 @@ Generation: Azure AI Foundry factory image model via `/opt/fleet/lib/gen-image.s
 ## Print treatment
 
 Print removes navigation and dark chrome. Repair cards become black-on-white, one continuous path with solid borders. Prompts, worked examples, and transfer checks remain visible; answer reveals stay hidden unless the user opened them.
+
+## Content review
+
+The dated independent mathematics-education audit, its scope, corrections, final result, and reviewer limitations are recorded in `.factory/content-review.md`. The review changed instructional content only; it did not change this visual thesis.

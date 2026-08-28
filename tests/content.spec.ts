@@ -19,3 +19,18 @@ test('@claim:open-content prerequisite content is complete and MIT licensed', ()
   expect(readFileSync('assets/src/hero-signal.png.json', 'utf8')).toContain('factory-image');
   expect(readFileSync('.factory/design.md', 'utf8')).toContain('ship under the repository MIT license');
 });
+
+test('@claim:content-reviewed records a complete independent mathematical audit', () => {
+  const review = readFileSync('.factory/content-review.md', 'utf8');
+  expect(review).toContain('**Reviewed:** 28 August 2026 (UTC)');
+  expect(review).toContain('not a human credentialed review');
+  expect(review).toContain('**Scope:** all 13 concepts');
+  expect(review).toContain('{"overall":"pass","findings":[]');
+  expect(review).toContain('"integrals"]');
+
+  const byId = new Map(concepts.map((concept) => [concept.id, concept]));
+  expect(byId.get('order-operations')?.repair).toContain('from left to right');
+  expect(byId.get('limits')?.answers[1].next).toBe('factoring');
+  expect(byId.get('derivatives')?.repair).toContain('Differentiate sums term by term');
+  expect(byId.get('integrals')?.question).toContain('family of functions');
+});

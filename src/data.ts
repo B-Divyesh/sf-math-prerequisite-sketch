@@ -31,8 +31,8 @@ export const concepts: Concept[] = [
     question: 'What is 1/3 + 1/6?',
     answers: [
       { label: '1/2', correct: true, note: 'Yes. 2/6 + 1/6 = 3/6 = 1/2.' },
-      { label: '2/9', note: 'Add fractions after making their denominators equal.', next: 'number-sense' },
-      { label: '2/6', note: 'Convert 1/3 to 2/6 before adding.', next: 'number-sense' }
+      { label: '2/9', note: 'Add fractions after making their denominators equal.', next: 'fractions' },
+      { label: '2/6', note: 'Convert 1/3 to 2/6 before adding.', next: 'fractions' }
     ],
     repair: 'Use a common denominator, add the numerators, then simplify.',
     example: '<math><mfrac><mn>1</mn><mn>3</mn></mfrac><mo>+</mo><mfrac><mn>1</mn><mn>6</mn></mfrac><mo>=</mo><mfrac><mn>3</mn><mn>6</mn></mfrac><mo>=</mo><mfrac><mn>1</mn><mn>2</mn></mfrac></math>',
@@ -43,8 +43,8 @@ export const concepts: Concept[] = [
     question: 'What is −4 − (−7)?',
     answers: [
       { label: '3', correct: true, note: 'Yes. Subtracting −7 is the same as adding 7.' },
-      { label: '−11', note: 'A minus before a negative changes the operation to addition.', next: 'number-sense' },
-      { label: '−3', note: 'After changing to −4 + 7, move seven places right.', next: 'number-sense' }
+      { label: '−11', note: 'A minus before a negative changes the operation to addition.', next: 'signed-numbers' },
+      { label: '−3', note: 'After changing to −4 + 7, move seven places right.', next: 'signed-numbers' }
     ],
     repair: 'Treat subtracting a negative as adding its positive opposite.',
     example: '<math><mo>−</mo><mn>4</mn><mo>−</mo><mo>(</mo><mo>−</mo><mn>7</mn><mo>)</mo><mo>=</mo><mo>−</mo><mn>4</mn><mo>+</mo><mn>7</mn><mo>=</mo><mn>3</mn></math>',
@@ -55,10 +55,10 @@ export const concepts: Concept[] = [
     question: 'What is 3 + 2 × 5?',
     answers: [
       { label: '13', correct: true, note: 'Yes. Multiply before adding.' },
-      { label: '25', note: 'Multiplication comes before addition here.', next: 'signed-numbers' },
-      { label: '17', note: 'Work one operation at a time, starting with multiplication.', next: 'signed-numbers' }
+      { label: '25', note: 'Multiplication comes before addition here.', next: 'order-operations' },
+      { label: '17', note: 'Work one operation at a time, starting with multiplication.', next: 'order-operations' }
     ],
-    repair: 'Do grouping and powers first, then multiplication, division, addition, and subtraction.',
+    repair: 'Do grouping symbols and exponents first. Then do multiplication and division from left to right, followed by addition and subtraction from left to right.',
     example: '<math><mn>3</mn><mo>+</mo><mn>2</mn><mo>×</mo><mn>5</mn><mo>=</mo><mn>3</mn><mo>+</mo><mn>10</mn><mo>=</mo><mn>13</mn></math>',
     transfer: 'Compute 18 ÷ 3 + 4.', transferAnswer: '10. Divide first, then add.'
   },
@@ -67,8 +67,8 @@ export const concepts: Concept[] = [
     question: 'Simplify 3x + 2x − 4.',
     answers: [
       { label: '5x − 4', correct: true, note: 'Yes. 3x and 2x are like terms.' },
-      { label: '5x', note: 'The constant −4 remains.', next: 'order-operations' },
-      { label: 'x − 4', note: 'Add the coefficients 3 and 2.', next: 'signed-numbers' }
+      { label: '5x', note: 'The constant −4 remains.', next: 'expressions' },
+      { label: 'x − 4', note: 'Add the coefficients 3 and 2.', next: 'expressions' }
     ],
     repair: 'Combine terms only when their variable parts match exactly.',
     example: '<math><mn>3</mn><mi>x</mi><mo>+</mo><mn>2</mn><mi>x</mi><mo>−</mo><mn>4</mn><mo>=</mo><mn>5</mn><mi>x</mi><mo>−</mo><mn>4</mn></math>',
@@ -79,8 +79,8 @@ export const concepts: Concept[] = [
     question: 'Solve 3x + 5 = 14.',
     answers: [
       { label: 'x = 3', correct: true, note: 'Yes. Subtract 5, then divide by 3.' },
-      { label: 'x = 19/3', note: 'Undo the added 5 before dividing.', next: 'expressions' },
-      { label: 'x = 9', note: 'After subtracting 5, divide both sides by 3.', next: 'fractions' }
+      { label: 'x = 19/3', note: 'Undo the added 5 before dividing.', next: 'linear-equations' },
+      { label: 'x = 9', note: 'After subtracting 5, divide both sides by 3.', next: 'linear-equations' }
     ],
     repair: 'Undo operations in reverse order and make the same change on both sides.',
     example: '<math><mn>3</mn><mi>x</mi><mo>+</mo><mn>5</mn><mo>=</mo><mn>14</mn><mo>⇒</mo><mn>3</mn><mi>x</mi><mo>=</mo><mn>9</mn><mo>⇒</mo><mi>x</mi><mo>=</mo><mn>3</mn></math>',
@@ -91,20 +91,20 @@ export const concepts: Concept[] = [
     question: 'What is the slope from (1, 2) to (3, 8)?',
     answers: [
       { label: '3', correct: true, note: 'Yes. The rise is 6 and the run is 2.' },
-      { label: '1/3', note: 'Slope is vertical change divided by horizontal change.', next: 'fractions' },
-      { label: '5', note: 'Subtract matching coordinates before dividing.', next: 'signed-numbers' }
+      { label: '1/3', note: 'Slope is vertical change divided by horizontal change.', next: 'slope' },
+      { label: '5', note: 'Subtract matching coordinates before dividing.', next: 'slope' }
     ],
     repair: 'Subtract y-values and x-values in the same point order, then divide.',
     example: '<math><mi>m</mi><mo>=</mo><mfrac><mrow><mn>8</mn><mo>−</mo><mn>2</mn></mrow><mrow><mn>3</mn><mo>−</mo><mn>1</mn></mrow></mfrac><mo>=</mo><mn>3</mn></math>',
     transfer: 'Find the slope from (−1, 4) to (2, 10).', transferAnswer: '2. The rise is 6 and the run is 3.'
   },
   {
-    id: 'function-notation', label: 'Function notation', band: 'Functions', prerequisiteIds: ['linear-equations'],
+    id: 'function-notation', label: 'Function notation', band: 'Functions', prerequisiteIds: ['expressions'],
     question: 'If f(x) = 2x + 1, what is f(4)?',
     answers: [
       { label: '9', correct: true, note: 'Yes. Replace x with 4.' },
-      { label: '2x + 5', note: 'f(4) asks you to replace every x with 4.', next: 'expressions' },
-      { label: '8', note: 'Keep the added 1 after substitution.', next: 'order-operations' }
+      { label: '2x + 5', note: 'f(4) asks you to replace every x with 4.', next: 'function-notation' },
+      { label: '8', note: 'Keep the added 1 after substitution.', next: 'function-notation' }
     ],
     repair: 'Read f(a) as “replace each x in the rule with a.”',
     example: '<math><mi>f</mi><mo>(</mo><mn>4</mn><mo>)</mo><mo>=</mo><mn>2</mn><mo>(</mo><mn>4</mn><mo>)</mo><mo>+</mo><mn>1</mn><mo>=</mo><mn>9</mn></math>',
@@ -115,10 +115,10 @@ export const concepts: Concept[] = [
     question: 'Which is a factorization of x² + 5x + 6?',
     answers: [
       { label: '(x + 2)(x + 3)', correct: true, note: 'Yes. 2 × 3 = 6 and 2 + 3 = 5.' },
-      { label: '(x + 1)(x + 6)', note: 'The constants multiply to 6 but add to 7.', next: 'expressions' },
-      { label: '(x − 2)(x − 3)', note: 'Two negative constants give a negative middle term.', next: 'signed-numbers' }
+      { label: '(x + 1)(x + 6)', note: 'The constants multiply to 6 but add to 7.', next: 'factoring' },
+      { label: '(x − 2)(x − 3)', note: 'Two negative constants give a negative middle term.', next: 'factoring' }
     ],
-    repair: 'Find two numbers whose product is the constant and whose sum is the middle coefficient.',
+    repair: 'For x² + bx + c, look for two numbers whose product is c and whose sum is b. This works when such factors exist.',
     example: '<math><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mn>5</mn><mi>x</mi><mo>+</mo><mn>6</mn><mo>=</mo><mo>(</mo><mi>x</mi><mo>+</mo><mn>2</mn><mo>)</mo><mo>(</mo><mi>x</mi><mo>+</mo><mn>3</mn><mo>)</mo></math>',
     transfer: 'Factor x² + 7x + 12.', transferAnswer: '(x + 3)(x + 4).'
   },
@@ -127,48 +127,48 @@ export const concepts: Concept[] = [
     question: 'Simplify x³ · x².',
     answers: [
       { label: 'x⁵', correct: true, note: 'Yes. Add exponents when multiplying the same base.' },
-      { label: 'x⁶', note: 'Multiplication of powers adds the exponents.', next: 'expressions' },
-      { label: '2x⁵', note: 'No new coefficient appears when each coefficient is 1.', next: 'number-sense' }
+      { label: 'x⁶', note: 'Multiplication of powers adds the exponents.', next: 'exponents' },
+      { label: '2x⁵', note: 'No new coefficient appears when each coefficient is 1.', next: 'exponents' }
     ],
-    repair: 'For the same base, multiplication adds exponents and division subtracts them.',
+    repair: 'For the same base, multiplication adds exponents. Division subtracts exponents when the base is not zero. A first power can be written without its exponent: x¹ = x.',
     example: '<math><msup><mi>x</mi><mn>3</mn></msup><mo>·</mo><msup><mi>x</mi><mn>2</mn></msup><mo>=</mo><msup><mi>x</mi><mn>5</mn></msup></math>',
     transfer: 'Simplify a⁷ ÷ a³.', transferAnswer: 'a⁴, when a is not zero.'
   },
   {
     id: 'limits', label: 'Limits', band: 'Calculus', prerequisiteIds: ['function-notation', 'factoring'],
-    question: 'For f(x) = 2x + 1, what does f(x) approach as x approaches 3?',
+    question: 'What is the limit of (x² − 9)/(x − 3) as x approaches 3?',
     answers: [
-      { label: '7', correct: true, note: 'Yes. This continuous rule approaches its value at 3.' },
-      { label: '3', note: 'Evaluate the function near the input 3.', next: 'function-notation' },
-      { label: 'It cannot be known', note: 'A polynomial is continuous, so substitution works here.', next: 'factoring' }
+      { label: '6', correct: true, note: 'Yes. Away from 3, the expression equals x + 3, which approaches 6.' },
+      { label: '0/0', note: 'That result signals that you should factor and simplify before evaluating the limit.', next: 'factoring' },
+      { label: 'The limit does not exist', note: 'A missing value at one input does not prevent nearby outputs from approaching a limit.', next: 'factoring' }
     ],
-    repair: 'A limit describes the output approached as the input moves close to a value.',
-    example: '<math><munder><mo>lim</mo><mrow><mi>x</mi><mo>→</mo><mn>3</mn></mrow></munder><mo>(</mo><mn>2</mn><mi>x</mi><mo>+</mo><mn>1</mn><mo>)</mo><mo>=</mo><mn>7</mn></math>',
-    transfer: 'Find the limit of x² as x approaches 4.', transferAnswer: '16.'
+    repair: 'A limit is the output approached near an input. If substitution gives 0/0, factor and cancel a shared nonzero factor first.',
+    example: '<math><munder><mo>lim</mo><mrow><mi>x</mi><mo>→</mo><mn>3</mn></mrow></munder><mfrac><mrow><msup><mi>x</mi><mn>2</mn></msup><mo>−</mo><mn>9</mn></mrow><mrow><mi>x</mi><mo>−</mo><mn>3</mn></mrow></mfrac><mo>=</mo><munder><mo>lim</mo><mrow><mi>x</mi><mo>→</mo><mn>3</mn></mrow></munder><mo>(</mo><mi>x</mi><mo>+</mo><mn>3</mn><mo>)</mo><mo>=</mo><mn>6</mn></math>',
+    transfer: 'Find the limit of (x² − 4)/(x − 2) as x approaches 2.', transferAnswer: '4. Factor the numerator, cancel x − 2 for nearby inputs, then evaluate x + 2.'
   },
   {
     id: 'derivatives', label: 'Derivatives', band: 'Calculus', prerequisiteIds: ['limits', 'exponents', 'slope'],
     question: 'What is the derivative of x²?',
     answers: [
       { label: '2x', correct: true, note: 'Yes. The power rule lowers the exponent by one.' },
-      { label: 'x', note: 'A derivative is a changing slope, built from a limit.', next: 'limits' },
-      { label: '2', note: 'Lower the exponent, but keep x to the new first power.', next: 'exponents' }
+      { label: 'x', note: 'The power rule also multiplies by the original exponent.', next: 'derivatives' },
+      { label: '2', note: 'Lower the exponent, but remember that x to the first power is still x.', next: 'exponents' }
     ],
-    repair: 'A derivative is the slope at one input. For xⁿ, multiply by n and lower the exponent by one.',
+    repair: 'A derivative function gives the instantaneous slope at each input. Differentiate sums term by term, keep constant factors, and use d(xⁿ)/dx = nxⁿ⁻¹ for positive integers n.',
     example: '<math><mfrac><mi>d</mi><mrow><mi>d</mi><mi>x</mi></mrow></mfrac><msup><mi>x</mi><mn>2</mn></msup><mo>=</mo><mn>2</mn><mi>x</mi></math>',
     transfer: 'Differentiate x³ + 4x.', transferAnswer: '3x² + 4.'
   },
   {
     id: 'integrals', label: 'Integrals', band: 'Calculus', prerequisiteIds: ['derivatives', 'function-notation'],
-    question: 'Which function has derivative 2x?',
+    question: 'Which family of functions has derivative 2x?',
     answers: [
       { label: 'x² + C', correct: true, note: 'Yes. C allows every constant vertical shift.' },
       { label: '2', note: 'Reverse the power rule and include a constant.', next: 'derivatives' },
-      { label: '2x²', note: 'Differentiate your choice to check it.', next: 'function-notation' }
+      { label: '2x²', note: 'Differentiate your choice to check it.', next: 'derivatives' }
     ],
     repair: 'An indefinite integral reverses differentiation and includes an unknown constant.',
     example: '<math><mo>∫</mo><mn>2</mn><mi>x</mi><mspace width=".2em"/><mi>d</mi><mi>x</mi><mo>=</mo><msup><mi>x</mi><mn>2</mn></msup><mo>+</mo><mi>C</mi></math>',
-    transfer: 'Find an antiderivative of 3x².', transferAnswer: 'x³ + C.'
+    transfer: 'Find the general antiderivative of 3x².', transferAnswer: 'x³ + C.'
   }
 ];
 

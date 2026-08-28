@@ -1,4 +1,4 @@
-const CACHE = 'math-missing-step-v1';
+const CACHE = 'math-missing-step-v2';
 const SHELL = ['/', '/index.html', '/assets/hero-signal.webp', '/assets/hero-signal.jpg', '/favicon.svg'];
 self.addEventListener('install', (event) => event.waitUntil((async () => {
   const cache = await caches.open(CACHE);

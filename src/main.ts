@@ -8,6 +8,7 @@ const app = document.querySelector<HTMLDivElement>('#app')!;
 const REAL_KEY = 'mmstep:sketch';
 let run: Run | undefined;
 let demo = false;
+let runInDemo = false;
 
 const escapeHtml = (value: string) => value.replace(/[&<>'"]/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[char]!));
 
@@ -109,8 +110,9 @@ function miniMap(activeIds: string[] = []) {
 
 function sketchPage() {
   const saved = demo ? demoSketch : loadSketch();
-  if (!run || run.sketch.goal !== saved.goal || run.sketch.problem !== saved.problem) {
+  if (!run || runInDemo !== demo) {
     run = { sketch: { ...saved }, current: saved.goal, visited: [] };
+    runInDemo = demo;
   }
   const form = `<form id="sketch-form" class="sketch-form" novalidate>
     <div class="field"><label for="problem">Problem you are working on</label><textarea id="problem" name="problem" required rows="3" aria-describedby="problem-help">${escapeHtml(run.sketch.problem)}</textarea><small id="problem-help">Copy the problem as written. Math symbols are welcome.</small></div>
@@ -138,7 +140,7 @@ function resultPanel(ids: string[]) {
 
 function mapPage() {
   const bands = ['Foundations', 'Algebra', 'Functions', 'Calculus'] as const;
-  return `<section class="content-page wrap"><p class="eyebrow">CURATED MAP / V1</p><h1 tabindex="-1">Inspect every prerequisite connection</h1><p class="lede">Thirteen concepts connect number sense to introductory integrals. Select a concept to read its direct prerequisites.</p><div class="full-map">${bands.map((band) => `<section><h2>${band}</h2><ul>${concepts.filter((c) => c.band === band).map((c) => `<li id="${c.id}"><h3>${c.label}</h3><p>${c.prerequisiteIds.length ? `Needs: ${c.prerequisiteIds.map((id) => conceptById.get(id)!.label).join(', ')}.` : 'Starting concept.'}</p><a href="/sketch?goal=${c.id}" data-concept-link="${c.id}">Check this concept</a></li>`).join('')}</ul></section>`).join('')}</div><aside class="review-note"><strong>Content note</strong><p>Examples are original and MIT licensed. Educator review is still requested before classroom use.</p></aside></section>`;
+  return `<section class="content-page wrap"><p class="eyebrow">CURATED MAP / V1</p><h1 tabindex="-1">Inspect every prerequisite connection</h1><p class="lede">Thirteen concepts connect number sense to introductory integrals. Select a concept to read its direct prerequisites.</p><div class="full-map">${bands.map((band) => `<section><h2>${band}</h2><ul>${concepts.filter((c) => c.band === band).map((c) => `<li id="${c.id}"><h3>${c.label}</h3><p>${c.prerequisiteIds.length ? `Needs: ${c.prerequisiteIds.map((id) => conceptById.get(id)!.label).join(', ')}.` : 'Starting concept.'}</p><a href="/sketch?goal=${c.id}" data-concept-link="${c.id}">Check this concept</a></li>`).join('')}</ul></section>`).join('')}</div><aside class="review-note"><strong>Content note</strong><p>Examples and branches passed an independent mathematical audit and exact-answer checks. Use them as study guidance, not a diagnosis.</p></aside></section>`;
 }
 
 function privacyPage() {
@@ -184,7 +186,7 @@ function handleAnswer(index: number) {
 
 function bindEvents() {
   document.querySelectorAll<HTMLAnchorElement>('[data-link]').forEach((link) => link.addEventListener('click', (event) => { event.preventDefault(); nav(new URL(link.href).pathname); }));
-  document.querySelectorAll<HTMLElement>('[data-concept-link]').forEach((link) => link.addEventListener('click', (event) => { event.preventDefault(); const id = link.dataset.conceptLink!; demo = false; const saved = loadSketch(); saved.goal = id; run = { sketch: saved, current: id, visited: [] }; nav('/sketch'); }));
+  document.querySelectorAll<HTMLElement>('[data-concept-link]').forEach((link) => link.addEventListener('click', (event) => { event.preventDefault(); const id = link.dataset.conceptLink!; demo = false; runInDemo = false; const saved = loadSketch(); saved.goal = id; run = { sketch: saved, current: id, visited: [] }; nav('/sketch'); }));
   document.querySelectorAll<HTMLButtonElement>('[data-answer]').forEach((button) => button.addEventListener('click', () => handleAnswer(Number(button.dataset.answer))));
   document.querySelector<HTMLFormElement>('#sketch-form')?.addEventListener('submit', (event) => {
     event.preventDefault();
@@ -200,7 +202,7 @@ function bindEvents() {
     run = { sketch, current: sketch.goal, visited: [], message: 'Sketch ready. Start with this prompt.' };
     render(false);
   });
-  document.querySelector('[data-action="reset-demo"]')?.addEventListener('click', () => { run = { sketch: { ...demoSketch }, current: demoSketch.goal, visited: [] }; render(false); });
+  document.querySelector('[data-action="reset-demo"]')?.addEventListener('click', () => { run = { sketch: { ...demoSketch }, current: demoSketch.goal, visited: [] }; runInDemo = true; render(false); });
   document.querySelector('[data-action="start-real"]')?.addEventListener('click', () => { demo = false; run = undefined; nav('/sketch'); });
   document.querySelector('[data-action="restart"]')?.addEventListener('click', () => { if (run) run = { sketch: run.sketch, current: run.sketch.goal, visited: [] }; render(false); });
   document.querySelector('[data-action="print"]')?.addEventListener('click', () => window.print());
@@ -209,7 +211,10 @@ function bindEvents() {
 function render(focusHeading = false) {
   const path = routePath();
   demo = path === '/demo';
-  if (demo && !run) run = { sketch: { ...demoSketch }, current: demoSketch.goal, visited: [] };
+  if (demo && !run) {
+    run = { sketch: { ...demoSketch }, current: demoSketch.goal, visited: [] };
+    runInDemo = true;
+  }
   const requestedGoal = new URL(location.href).searchParams.get('goal');
   if (path === '/sketch' && requestedGoal && conceptById.has(requestedGoal) && (!run || run.sketch.goal !== requestedGoal)) {
     const sketch = { ...loadSketch(), goal: requestedGoal };

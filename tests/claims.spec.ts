@@ -41,8 +41,11 @@ test('@claim:local-only the real sketch stays in browser storage with same-origi
 
 test('@claim:path-max-three gives a repair path of no more than three nodes', async ({ page }) => {
   await page.goto('/demo');
+  await page.locator('#goal').selectOption('integrals');
+  await page.getByRole('button', { name: 'Check this prerequisite' }).click();
+  await expect(page.locator('#goal')).toHaveValue('integrals');
   await page.locator('[data-answer="1"]').click();
-  await page.locator('[data-answer="1"]').click();
+  await page.locator('[data-answer="2"]').click();
   await page.locator('[data-answer="0"]').click();
   await expect(page.getByRole('heading', { name: 'Repair this path, then retry' })).toBeVisible();
   const count = await page.locator('.repair-card').count();
